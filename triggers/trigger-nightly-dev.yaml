@@ -1,0 +1,38 @@
+# Reference: Nightly Dev Deploy Trigger
+# ─────────────────────────────────────────────────────────────────────────────
+# In Harness, triggers are managed under Pipelines → <pipeline> → Triggers.
+# You can create this trigger in the UI or import this YAML directly.
+# ─────────────────────────────────────────────────────────────────────────────
+
+trigger:
+  name: Nightly Dev Deploy
+  identifier: nightly_dev_deploy
+  enabled: true
+  description: Deploy latest main-branch build to dev every night at 2 AM UTC
+
+  # ── Schedule configuration ────────────────────────────────────────────────
+  source:
+    type: Scheduled
+    spec:
+      type: Cron
+      spec:
+        expression: "0 2 * * *"   # Every night at 2:00 AM UTC
+        type: UNIX
+        # timezone: America/New_York  # Requires feature flag: PIPE_SUPPORT_MULTIPLE_TIMEZONES_IN_CRON_TRIGGERS
+
+  # ── Pipeline to trigger ───────────────────────────────────────────────────
+  pipelineIdentifier: scheduled_deploy
+  pipelineBranchName: main         # Pipeline YAML branch
+
+  # ── Input values provided by this trigger ─────────────────────────────────
+  # These fill in the pipeline's <+input> variables at execution time.
+  inputYaml: |
+    pipeline:
+      identifier: scheduled_deploy
+      variables:
+        - name: environment
+          type: String
+          value: dev
+        - name: appVersion
+          type: String
+          value: latest

@@ -1,0 +1,77 @@
+pipeline:
+  name: scheduled-deploy
+  identifier: scheduled_deploy
+  projectIdentifier: <+input>
+  orgIdentifier: <+input>
+  description: >
+    Parameterized CD pipeline that can be triggered by scheduled cron triggers.
+    Each trigger provides its own environment and appVersion input values.
+  tags: {}
+  # ── Pipeline Variables ─────────────────────────────────────────────────────
+  # These are populated by the cron trigger's inputYaml at execution time.
+  # They can also be set manually when running the pipeline.
+  variables:
+    - name: environment
+      type: String
+      description: Target environment — dev, staging, or prod
+      required: true
+      value: <+input>
+    - name: appVersion
+      type: String
+      description: Docker image tag / application version to deploy
+      required: false
+      value: latest
+
+  stages:
+    - stage:
+        name: Deploy
+        identifier: deploy
+        type: Deployment
+        spec:
+          serviceConfig:
+            serviceRef: my_service
+            serviceDefinition:
+              type: Kubernetes
+              spec:
+                artifacts:
+                  primary:
+                    type: DockerRegistry
+                    spec:
+                      connectorRef: docker_hub_connector
+                      imagePath: myorg/myapp
+                      # appVersion pipeline variable is set by the trigger's inputYaml
+                      tag: <+pipeline.variables.appVersion>
+
+          infrastructure:
+            # environment pipeline variable is set by the trigger's inputYaml
+            environmentRef: <+pipeline.variables.environment>
+            infrastructureDefinition:
+              type: KubernetesDirect
+              spec:
+                connectorRef: k8s_connector
+                namespace: <+pipeline.variables.environment>  # Namespace mirrors env name
+
+          execution:
+            steps:
+              - step:
+                  type: K8sRollingDeploy
+                  name: rolling_deploy
+                  identifier: rolling_deploy
+                  spec:
+                    skipDryRun: false
+                  timeout: 10m
+
+            rollbackSteps:
+              - step:
+                  type: K8sRollingRollback
+                  name: rolling_rollback
+                  identifier: rolling_rollback
+                  spec: {}
+                  timeout: 10m
+
+        failureStrategies:
+          - onFailure:
+              errors:
+                - AllErrors
+              action:
+                type: StageRollback
