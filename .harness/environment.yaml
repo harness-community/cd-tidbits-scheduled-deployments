@@ -1,0 +1,9 @@
+# environment.yaml — Harness environment (the "where" of a deployment).
+# PreProduction marks this as a Dev/QA/Staging target (vs Production).
+# Scheduled deployments are intended for NON-PRODUCTION environments like this one.
+environment:
+  name: env_dev_tid0062
+  identifier: env_dev_tid0062
+  orgIdentifier: default # REPLACE: your org identifier
+  projectIdentifier: project_1 # REPLACE: your project identifier
+  type: PreProduction # PreProduction | Production  (keep PreProduction for scheduled/nightly deploys)

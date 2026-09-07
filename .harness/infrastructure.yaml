@@ -1,0 +1,15 @@
+# infrastructure.yaml — Kubernetes infrastructure definition (lives inside the environment).
+# KubernetesDirect uses a Kubernetes Cluster connector (usually backed by a delegate).
+infrastructureDefinition:
+  name: infra_k8s_tid0062
+  identifier: infra_k8s_tid0062
+  orgIdentifier: default # REPLACE: your org identifier
+  projectIdentifier: project_1 # REPLACE: your project identifier
+  environmentRef: env_dev_tid0062 # must match the environment identifier above
+  deploymentType: Kubernetes
+  type: KubernetesDirect
+  spec:
+    connectorRef: account.k8s_delegate # REPLACE: your Kubernetes Cluster connector
+    namespace: tidbit-0062 # REPLACE: target namespace (auto-created by namespace.yaml)
+    releaseName: release-<+INFRA_KEY> # Harness expression; unique per infra. Leave as-is.
+  allowSimultaneousDeployments: false
