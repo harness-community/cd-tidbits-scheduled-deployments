@@ -16,35 +16,21 @@ service:
             identifier: tid0062_manifest
             type: K8sManifest
             spec:
-              store:
-                # Manifests live in the Harness File Store so the repo is fully
-                # self-contained. To use YOUR Git repo instead, swap `type: Harness`
-                # for a Github store (see the commented block below) pointing at k8s/.
-                type: Harness
-                spec:
-                  files:
-                    # ORDER MATTERS: namespace first so it exists before the workload.
-                    - /tid0062_manifests/namespace.yaml # REPLACE: your File Store path
-                    - /tid0062_manifests/deployment.yaml # REPLACE: your File Store path
-                    - /tid0062_manifests/service.yaml # REPLACE: your File Store path
-              valuesPaths:
-                - /tid0062_manifests/values.yaml # REPLACE: your File Store path
               skipResourceVersioning: false
               enableDeclarativeRollback: false
-              # --- Alternative: fetch manifests from Git instead of File Store ---
-              # store:
-              #   type: Github
-              #   spec:
-              #     connectorRef: account.github_public   # REPLACE: your GitHub connector
-              #     gitFetchType: Branch
-              #     paths:
-              #       - k8s/namespace.yaml
-              #       - k8s/deployment.yaml
-              #       - k8s/service.yaml
-              #     repoName: cd-tidbits-scheduled-deployments  # REPLACE: your fork
-              #     branch: main
-              # valuesPaths:
-              #   - k8s/values.yaml
+              store:
+                type: Github
+                spec:
+                  connectorRef: account.github_public # REPLACE: your GitHub connector
+                  gitFetchType: Branch
+                  paths:
+                    - k8s/namespace.yaml
+                    - k8s/deployment.yaml
+                    - k8s/service.yaml
+                  repoName: cd-tidbits-scheduled-deployments # REPLACE: your fork
+                  branch: main
+              valuesPaths:
+                - k8s/values.yaml
       artifacts:
         primary:
           primaryArtifactRef: nginx
