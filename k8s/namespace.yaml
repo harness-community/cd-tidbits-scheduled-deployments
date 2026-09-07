@@ -1,0 +1,8 @@
+# This file MUST be listed first in the service's manifest list.
+# Harness does not auto-create namespaces — this does it before the workload is applied.
+{{- if .Values.createNamespace}}
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{.Values.namespace}}
+{{- end}}

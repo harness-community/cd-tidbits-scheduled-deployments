@@ -1,0 +1,16 @@
+name: basic-deployment
+
+# How many pod copies to run during the rolling update
+replicas: 2
+
+# Harness fills this in from your service's artifact source at deploy time
+image: <+artifact.image>
+
+# Create the namespace if it doesn't already exist
+createNamespace: true
+# Harness fills this in from your infrastructure definition at deploy time
+namespace: <+infra.namespace>
+
+serviceType: ClusterIP
+servicePort: 80
+serviceTargetPort: 80
