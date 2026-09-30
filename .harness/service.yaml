@@ -6,8 +6,8 @@
 service:
   name: svc_tid0062
   identifier: svc_tid0062
-  orgIdentifier: default # REPLACE: your org identifier
-  projectIdentifier: project_1 # REPLACE: your project identifier
+  orgIdentifier: default # REPLACE: your org identifier if creating inside an organization
+  projectIdentifier: project_1 # REPLACE: your project identifier if creating inside a project , not needed if creating inside an organization
   serviceDefinition:
     type: Kubernetes
     spec:
@@ -21,14 +21,14 @@ service:
               store:
                 type: Github
                 spec:
-                  connectorRef: account.github_public # REPLACE: your GitHub connector
+                  connectorRef: account.github_public # REPLACE: your GitHub connector (anonymous is fine for public repos)
                   gitFetchType: Branch
                   paths:
                     - k8s/namespace.yaml
                     - k8s/deployment.yaml
                     - k8s/service.yaml
-                  repoName: cd-tidbits-scheduled-deployments # REPLACE: your fork
-                  branch: main
+                  repoName: cd-tidbits-scheduled-deployments # REPLACE: your repository name
+                  branch: main # REPLACE: your branch name
               valuesPaths:
                 - k8s/values.yaml
       artifacts:

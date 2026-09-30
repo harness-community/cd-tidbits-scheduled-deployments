@@ -4,6 +4,6 @@
 environment:
   name: env_dev_tid0062
   identifier: env_dev_tid0062
-  orgIdentifier: default # REPLACE: your org identifier
-  projectIdentifier: project_1 # REPLACE: your project identifier
+  orgIdentifier: default # REPLACE: your org identifier if creating inside an organization
+  projectIdentifier: project_1 # REPLACE: your project identifier if creating inside a project , not needed if creating inside an organization
   type: PreProduction # PreProduction | Production  (keep PreProduction for scheduled/nightly deploys)
