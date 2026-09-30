@@ -1,6 +1,6 @@
 pipeline:
-  name: scheduled-deploy
-  identifier: scheduled_deploy
+  name: scheduled-deploy # TODO: change to the your pipeline name
+  identifier: scheduled_deploy # TODO: change to the your pipeline identifier
   projectIdentifier: <+input>
   orgIdentifier: <+input>
   description: >
@@ -29,7 +29,7 @@ pipeline:
         type: Deployment
         spec:
           serviceConfig:
-            serviceRef: my_service
+            serviceRef: my_service # TODO: change to the your service name
             serviceDefinition:
               type: Kubernetes
               spec:
@@ -37,8 +37,8 @@ pipeline:
                   primary:
                     type: DockerRegistry
                     spec:
-                      connectorRef: docker_hub_connector
-                      imagePath: myorg/myapp
+                      connectorRef: docker_hub_connector # TODO: change to the your docker connector
+                      imagePath: myorg/myapp # TODO: change to the your docker image path
                       # appVersion pipeline variable is set by the trigger's inputYaml
                       tag: <+pipeline.variables.appVersion>
 
@@ -48,7 +48,7 @@ pipeline:
             infrastructureDefinition:
               type: KubernetesDirect
               spec:
-                connectorRef: k8s_connector
+                connectorRef: k8s_connector # TODO: change to the your k8s connector
                 namespace: <+pipeline.variables.environment>  # Namespace mirrors env name
 
           execution:
